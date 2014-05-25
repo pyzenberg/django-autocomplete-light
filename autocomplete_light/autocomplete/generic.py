@@ -158,4 +158,10 @@ class AutocompleteGeneric(six.with_metaclass(AutocompleteGenericMetaClass,
             for choice in queryset.filter(pk__in=ids):
                 values_choices.append(choice)
 
+        values_choices = [
+            c for v in self.values 
+                for c in values_choices 
+                    if v == '%s-%s' % (ContentType.objects.get_for_model(c).pk, c.pk)
+        ][::-1]
+
         return values_choices
